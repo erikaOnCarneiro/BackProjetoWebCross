@@ -8,36 +8,30 @@ Este projeto implementa um sistema completo de gerenciamento do box de Cross uti
 ---
 
 ## 📁 Estrutura do Projeto
-├── src
-│   ├── controller
-│   │   ├── AlunoController.js
-│   │   ├── LoginController.js
-│   │   ├── MensalidadeController.js
-│   │   └── AdminController.js
-│   
-│   ├── services
-│   │   ├── AlunoService.js
-│   │   ├── LoginService.js
-│   │   ├── MensalidadeService.js
-│   │   └── FinanceiroService.js
-│
-│   ├── repository
-│   │   ├── AlunoRepository.js
-│   │   ├── LoginRepository.js
-│   │   ├── MensalidadeRepository.js
-│   │   └── connection.js
-│
-│   ├── utils
-│   │   ├── ValidadorEmail.js
-│   │   ├── ValidadorCPF.js
-│   │   └── ConversorData.js
-│
-│   ├── routes
-│   │   ├── alunoRoutes.js
-│   │   ├── loginRoutes.js
-│   │   └── mensalidadeRoutes.js
-│
-│   └── server
-│       └── Server.js
-│
-├── .env
+...
+
+## ⚙️ Tecnologias Utilizadas
+
+- Node.js
+- Express.js
+- MySQL (com `mysql2`)
+- Dotenv (`.env`)
+- Arquitetura MVC
+- Programação assíncrona (async/await)
+- JavaScript 
+
+---
+
+## 📌 Funcionalidades
+
+- ✅ Cadastro e gerenciamento de **Alunos**
+- ✅ Controle de **Mensalidades**
+- ✅ Sistema de **Login administrador**
+- ✅ Registro de **objetivos de treino de cada Aluno**
+- ✅ Administração de **Financeiro**
+- ✅ Validação de CPF e e-mail
+- ✅ Organização por camadas: Controller, Service, Repository, Utils
+
+---
+
+## 🚀 Como Rodar o Projeto
