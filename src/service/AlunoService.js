@@ -26,3 +26,4 @@ export async function removerAluno(id) {
     if (!id) throw new Error('ID é obrigatório para remover.');
     return await alunoRepository.removerAluno(id);
 }
+ 

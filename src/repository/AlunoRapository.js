@@ -81,3 +81,13 @@ export async function removerAluno(id) {
         throw new Error('Erro ao remover o aluno banco de dados.');
     }
 }
+export async function buscarAlunoPorNome(nome) {
+    let comando = `SELECT * FROM tb_aluno WHERE nome LIKE ?`;
+    try {
+        const [registros] = await connection.query(comando, [`%${nome}%`]);
+        return registros;
+    } catch (error) {
+        console.error('Erro ao buscar o aluno por nome no banco.', error);
+        throw new Error('Erro ao buscar o aluno por nome no banco de dados.');
+    }
+}

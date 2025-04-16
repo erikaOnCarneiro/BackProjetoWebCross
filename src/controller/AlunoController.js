@@ -27,3 +27,4 @@ endpoints.get('aluno/:params', async (req, res) => {
         res.status(500).send({ erro: error.message });
     }
 });
+
