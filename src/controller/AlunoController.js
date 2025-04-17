@@ -17,7 +17,7 @@ endpoints.get('/aluno/listar', async (req, resp) => {
     }
 });
 
-endpoints.get('aluno/:params', async (req, res) => {
+endpoints.get('/aluno/:params', async (req, res) => {
     try {
         const param = req.params.params;
         const resposta = await AlunoService.buscarAlunoPorIdOuCpf(param);

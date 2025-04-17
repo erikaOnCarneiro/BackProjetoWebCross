@@ -1,18 +1,15 @@
-import mysql from 'mysql2'
+import dotenv from 'dotenv';
+import mysql from 'mysql2/promise';
 
-const connection = await mysql.createConnection({
+dotenv.config();
+
+const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   database: process.env.MYSQL_DB,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PWD
 })
 
-connection.connect((err) => {
-  if (err) {
-      console.error('Erro ao conectar ao banco de dados:', err);
-  } else {
-      console.log('Conexão estabelecida com o banco de dados com sucesso.');
-  }
-});
+console.log('🟢 Conexão estabelecida com o banco de dados MySQL');
 
 export default connection;

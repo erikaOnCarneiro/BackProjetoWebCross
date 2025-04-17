@@ -7,7 +7,7 @@ export async function listarAlunos() {
         return registros;
     } catch (error) {
         console.error('Erro para listar os alunos no banco.', error);
-        throw new Error(`Erro no banco ao listar aluno: ${error.messagem}`);
+        throw new Error(`Erro no banco ao listar aluno: ${error.message}`);
     }
 
 }
@@ -41,11 +41,11 @@ export async function inserirAluno(aluno) {
         aluno.observacoes, aluno.dataRegistro, aluno.statusAluno
         ]);
 
-        return info.inserirId;
+        return info.insertId; 
 
     } catch (error) {
         console.error('Erro ao inserir o aluno no banco.', error);
-        throw new Error('Erro ao inserir o aluno banco de dados.');
+        throw new Error('Erro ao inserir o aluno no banco de dados.');
     }
 }
 
@@ -67,7 +67,7 @@ export async function alterarAluno(id, aluno) {
         return info.affectedRows;
     } catch (error) {
         console.error('Erro ao alterar o aluno no banco.', error);
-        throw new Error('Erro ao alterar o aluno banco de dados.');
+        throw new Error('Erro ao alterar o aluno no banco de dados.');
     }
 }
 
@@ -78,7 +78,7 @@ export async function removerAluno(id) {
         return info.affectedRows;
     } catch (error) {
         console.error('Erro ao remover o aluno no banco.', error);
-        throw new Error('Erro ao remover o aluno banco de dados.');
+        throw new Error('Erro ao remover o aluno no banco de dados.');
     }
 }
 export async function buscarAlunoPorNome(nome) {
