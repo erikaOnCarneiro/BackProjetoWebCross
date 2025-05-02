@@ -1,6 +1,5 @@
-node_modules/
-.env
-configGit
+/node_modules
+/.env
+/src/database/connection.js
 
-package-lock.json
-package.json
+
