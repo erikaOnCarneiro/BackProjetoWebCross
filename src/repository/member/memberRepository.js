@@ -1,10 +1,12 @@
-import connection from "../database/connection.js";
+import connection from "../../database/connection.js";
 
 export async function MemberRegistration(member) {
     let insertMemberQuery = `insert into Aluno(nome, cpf, nascimento, genero, email, telefone, 
-                                                  endereco,origem, foto, observacoes, dataRegistro, 
-                                                  statusAluno) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                                                  endereco, foto, observacoes, dataRegistro, 
+                                                  statusAluno) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
+
+//adicionar logica para o tratamento da data(nascimento/registro - automatico) - genero -
     try{
         const [info] = await connection.query(insertMemberQuery, [member.nome, 
                                                                   member.cpf, 
@@ -13,7 +15,6 @@ export async function MemberRegistration(member) {
                                                                   member.email,
                                                                   member.telefone,
                                                                   member.endereco,
-                                                                  member.origem,
                                                                   member.foto,
                                                                   member.observacoes,
                                                                   member.dataRegistro,
@@ -25,7 +26,9 @@ export async function MemberRegistration(member) {
     }
 }
 
-export async function MemberListar(member) {
-    
+export async function MemberList() {
+    const memberList = `select * from Aluno`;
+    let[listRegister] = await connection.query(memberList)
+    return listRegister;
 }
 
