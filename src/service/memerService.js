@@ -1,14 +1,15 @@
-//import { parse, isValid } from "date-fns";
+//import { parse, isValid, format } from "date-fns";
 //import { ptBR } from "date-fns/locale";
-//import Joi from "joi";
-//import { cpf } from "cpf-cnpj-validator";
-//import GenderEnum from "../constants/genderEnum.js"; 
-import { MemberRegistration } from "../repository/member/memberRepository.js";
+import Joi from "joi";
+import { cpf } from "cpf-cnpj-validator";
+import GenderEnum from "../constants/genderEnum.js";
+import { memberRegistration } from "../repository/memberRepository.js";
 
 // Esquemas Joi para validação
-//const cpfSchema = Joi.string().length(11).pattern(/^\d+$/).required();
-//const emailSchema = Joi.string().email().required();
-//const phoneSchema = Joi.string().pattern(/^\(\d{2}\)\s\d{5}-\d{4}$/).required();
+const cpfSchema = Joi.string().length(11).pattern(/^\d+$/).required();
+const emailSchema = Joi.string().email().required();
+const phoneSchema = Joi.string().pattern(/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/).required();
+//const birthSchema = Joi.string().pattern(/^\d{2}-\d{2}-\d{4}$/).required();
 
 
 // Validação do nome
@@ -20,74 +21,66 @@ const validateName = (name) => {
 }
 
 // Validação do CPF
-/*const validateCpf = (cpfValue) => {
-    if (!cpfValue) throw new Error("CPF não pode ser undefined ou vazio.");
+const validateCpf = (cpfInput) => {
+    if (!cpfInput) throw new Error("CPF não pode ser undefined ou vazio.");
 
-    cpfValue = cpfValue.replace(/\D/g, ""); // Remove pontos e traços
+    const cpfValue = cpfInput.replace(/\D/g, ""); // expressão regular para aceitar digitor de 0-9 e tirar caracteres
 
-    const { error } = cpfSchema.validate(cpfValue);
-    if (error) throw new Error("Formato de CPF inválido.");
+    const { err } = cpfSchema.validate(cpfValue);
+    if (err) throw new Error("Formato de CPF inválido.");
 
     if (!cpf.isValid(cpfValue)) throw new Error("CPF inválido.");
+    return cpfValue;
 }
 
 // Validação do email
 const validateEmail = (email) => {
-    const { error } = emailSchema.validate(email);
-    if (error) throw new Error("Email inválido!");
+    const { err } = emailSchema.validate(email);
+    if (err) throw new Error("Email inválido!");
+    return email;
 }
 
 // Validação do telefone
 const validatePhone = (phone) => {
-    const { error } = phoneSchema.validate(phone);
-    if (error) throw new Error("Telefone inválido! O formato correto é (XX) XXXXX-XXXX.");
+    const { err } = phoneSchema.validate(phone);
+    if (err) throw new Error(err.details[0].message);
+    return phone;
 }
 
 // Validação do gênero
-/*const validateGender = (gender) => {
-    console.log('Valor recebido de gender:', gender);  // Para ver o valor exato
-    const genderAsNumber = Number(gender);  // Converte para número
-    console.log('Valor após conversão para número:', genderAsNumber);  // Para verificar a conversão
-  
-    // Verifica se a conversão foi bem-sucedida e se o número está no enum
-    if (isNaN(genderAsNumber) || !Object.values(GenderEnum).includes(genderAsNumber)) {
-      throw new Error("Gênero inválido.");
+const validateGender = (gender) => {
+    console.log('Entrando na função validateGender. Valor de gender:', gender);  // Valor de 'gender' passado para a função
+
+    // Verifica se o valor de gender está no enum
+    if (!Object.values(GenderEnum).includes(gender)) {
+        console.log('Gênero inválido:', gender); // Valor inválido
+        throw new Error("Gênero inválido.");
     }
-  };*/
+
+    console.log('Gênero válido:', gender);  // Gênero válido
+    return gender;  // Retorna o valor numérico de gênero
+}
 
 
 //validação da data de nasicmento
 /*const validateDateOfBirth = (birth) => {
-    if (!birth) throw new Error("Data de nascimento inválida.");
+    const { err } = birthSchema.validate(birth);
 
-    let dateOfBirth;
-
-    // Se for uma string, tenta converter para Date
-    if (typeof birth === "string") {
-        // Substitui as barras por hífens
-        birth = birth.replace(/\//g, "-");
-
-        // Tenta interpretar a data no formato dd-MM-yyyy
-        const date = parse(birth, "dd-MM-yyyy", new Date(), { locale: ptBR });
-
-        // Verifica se a data é válida
-        if (!isValid(date)) {
-            console.error("Data de nascimento inválida:", birth);
-            throw new Error("Data de nascimento inválida.");
-        }
-
-        // A data foi convertida corretamente, então só formatamos para yyyy-MM-dd
-        dateOfBirth = date;
-    } else {
-        throw new Error("Data de nascimento inválida.");
+    if (err) {
+      throw new Error("Data de nascimento no formato inválido. O formato correto é dd-MM-yyyy");
     }
-
-    // Retorna a data no formato yyyy-MM-dd
-    const formattedDate = dateOfBirth.toISOString().split("T")[0];
-
-    return formattedDate;  // Retorna no formato yyyy-MM-dd
-}
-*/
+  
+    // Tentando parsear a data usando date-fns
+    const date = parse(birth, 'dd-MM-yyyy', new Date());
+  
+    // Verificando se a data é válida
+    if (!isValid(date)) {
+      throw new Error('Data de nascimento inválida');
+    }
+  
+    // Formatar a data no formato yyyy-MM-dd para enviar ao banco
+    return format(date, 'yyyy-MM-dd');
+  }
 
 // Data de registro do membro (gerada automaticamente)
 /*const memberRegistrationDate = () => {
@@ -100,25 +93,26 @@ const validatePhone = (phone) => {
 const validateStatusMember = (status) => {
     if (typeof status !== 'boolean') {
         throw new Error("Status inválido: deve ser um valor booleano.");
-      }
-      return status;
-  }
+    }
+    return status;
+}
 // Criando membro e validando os dados
 const createMember = async (member) => {
-
-    member.statusAluno = validateStatusMember(member.statusAluno);
+    
+    
+    
     validateName(member.nome);
-    //validateCpf(member.cpf);
-   // member.nascimento = validateDateOfBirth(member.dateOfBirth);
-    //validateGender(member.gender);
-    //validateEmail(member.email);
-    //validatePhone(member.phone);
-    //member.statusAluno = validateStatusMember(member.status);
+    member.cpf = validateCpf(member.cpf);
+    member.genero = validateGender(member.genero); 
+    member.phone = validatePhone(member.telefone);
+    member.email = validateEmail(member.email);
+    member.statusAluno = validateStatusMember(member.statusAluno);
     //member.dataRegistro = memberRegistrationDate();
+   // member.birth = validateDateOfBirth(member.nascimento);
 
-   
 
-    return await MemberRegistration(member);
+
+    return await memberRegistration(member);
 }
 
 export default createMember;

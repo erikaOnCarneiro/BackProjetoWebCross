@@ -1,9 +1,9 @@
-import connection from "../../database/connection.js";
+import connection from "../database/connection.js";
 
-export async function MemberRegistration(member) {
+export async function memberRegistration(member) {
     let insertMemberQuery = `insert into Aluno(nome, cpf, nascimento, genero, email, telefone, 
-                                                  endereco, foto, observacoes, dataRegistro, 
-                                                  statusAluno) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                                                  endereco, foto, observacoes, statusAluno) 
+                                                  values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
 
 //adicionar logica para o tratamento da data(nascimento/registro - automatico) - genero -
@@ -17,7 +17,6 @@ export async function MemberRegistration(member) {
                                                                   member.endereco,
                                                                   member.foto,
                                                                   member.observacoes,
-                                                                  member.dataRegistro,
                                                                   member.statusAluno]);
     return info.insertId;
     } catch (err) {
@@ -26,9 +25,15 @@ export async function MemberRegistration(member) {
     }
 }
 
-export async function MemberList() {
+export async function memberList() {
     const memberList = `select * from Aluno`;
     let[listRegister] = await connection.query(memberList)
     return listRegister;
+}
+
+export async function memberDeleteById(idMember) {
+    const memberRemoveById = `DELETE FROM Aluno WHERE idAluno = ?`;
+    let[deleteRegister] = await connection.query(memberRemoveById, [idMember]);
+    return deleteRegister.affectedRows;
 }
 
